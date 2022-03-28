@@ -167,6 +167,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	private final Map<String, RootBeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>(256);
 
 	/** Names of beans that have already been created at least once. */
+	/**
+	 * 已经创建过或正在创建中的Bean集合
+	 */
 	private final Set<String> alreadyCreated = Collections.newSetFromMap(new ConcurrentHashMap<>(256));
 
 	/** Names of beans that are currently in creation. */
@@ -315,7 +318,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 			// 如果不是做类型检查，表示要创建bean并在集合中记录
 			if (!typeCheckOnly) {
-				// 为beanName标记为已经创建或将要创建
+				// 将beanName标记为已经创建或将要创建
 				markBeanAsCreated(beanName);
 			}
 
@@ -1626,6 +1629,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @param beanName the name of the bean
 	 */
 	protected void markBeanAsCreated(String beanName) {
+		// 如果beanName不是正在创建中的Bean对象
 		if (!this.alreadyCreated.contains(beanName)) {
 			synchronized (this.mergedBeanDefinitions) {
 				if (!this.alreadyCreated.contains(beanName)) {

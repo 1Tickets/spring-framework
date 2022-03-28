@@ -76,7 +76,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 	/** Cache of singleton objects: bean name to bean instance. */
 	/**
-	 * 单例对象的缓存(一级缓存)
+	 * 单例对象的缓存(一级缓存)：存放已经经历过完整生命周期的Bean对象
 	 */
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
@@ -90,6 +90,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/**
 	 * 二级缓存：保存beanName和创建bean实例之间的关系，
 	 * 与singletonFactories的不同之处在于：当一个单例Bean被放入到这里之后，那么当Bean还在创建过程中就可以通过getBean方法获取，可以方便进行循环依赖的检测
+	 * 存放早期暴露出来的Bean对象，Bean的生命周期还未走完，但是已经实例化，还未初始化属性的Bean对象
 	 */
 	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
 
